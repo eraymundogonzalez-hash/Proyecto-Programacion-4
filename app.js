@@ -39,6 +39,11 @@ async function cargarProductos() {
                     </span>
                 </td>
                 <td class="text-end">
+                    <button class="btn btn-outline-primary btn-sm" onclick="comprarProducto(${p.id})">
+                        <i class="bi bi-trash"></i> Comprar
+                    </button>
+                </td>
+                <td class="text-end">
                     <button class="btn btn-outline-danger btn-sm" onclick="eliminarProducto(${p.id})">
                         <i class="bi bi-trash"></i> Eliminar
                     </button>
@@ -79,6 +84,22 @@ async function eliminarProducto(id_producto){
 
     try {
         const respuesta = await fetch("http://127.0.0.1:8000/productos/"+id_producto, {method: "DELETE", headers: {"Content-Type": "application/json"}});
+
+        if(respuesta){
+            await cargarProductos();
+        }else{
+            console.error("Hubo algo malo al eliminar")
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function comprarProducto(id_producto){
+    event.preventDefault();
+
+    try {
+        const respuesta = await fetch("http://127.0.0.1:8000/productos/"+id_producto, {method: "POST", headers: {"Content-Type": "application/json"}});
 
         if(respuesta){
             await cargarProductos();
